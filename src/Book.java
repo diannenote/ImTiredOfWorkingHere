@@ -49,29 +49,28 @@ public class Book {
 	public void showBook() throws Exception {
 		for(int i =0; i<10; i++) {
 			Book book = new Book();
-			book.setNo(" "+i + " ");
+			book.setNo(""+i);
 			book.setAuthor("작가");
 			book.setGanre("장르");
-			book.setTitle("제목"+ i);
+			book.setTitle("제목" +i);
 			book.setAvailable(true);
 			bookList.add(book);
 		}
-		System.out.println("===================================================================================");
-		System.out.println("                  1.도서검색 || 2.도서등록 || 3.도서정보수정 || 4.도서삭제 || 5.종료");	
-		System.out.println("===================================================================================");
-		System.out.print("숫자입력(1~5)>> ");
+		
+		System.out.println("===============================================================================");
+		System.out.println("     1.도서검색 || 2.도서등록 || 3.도서정보수정 || 4.도서삭제 || 5.대출/반납하기 || 6.종료");	
+		System.out.println("===============================================================================");
+		System.out.print("숫자입력(1~6)>> ");
 		String inputVal = sc.next();
-//		char temp;
-//		if(Character.isDigit(temp)) {
-//		}
+
 		switch (inputVal) {
 			case ("1"): {
 				System.out.println("///////------------도서검색-------------/////");
 				for(Book book:bookList) {
 					boolean chk = book.isAvailable();
-					String YN = "불가능";
+					String YN = "대출중";
 					if(chk) {
-						YN = "가능";
+						YN = "대출 가능";
 					}
 					System.out.print("고유번호: " + book.getNo() + "\t" + "책이름: " + book.getTitle() + "\t" + "지은이: "+ book.getAuthor() + "\t" + 
 							"장르: " + book.getGanre() + "\t" + "대출가능여부: " + YN );
@@ -101,6 +100,21 @@ public class Book {
 			}
 			
 			case ("5"): {
+				System.out.println("///////------------대출/반납하기-------------/////");
+				System.out.print("1.대출 2.반납 > ");
+				String input = sc.next();
+				if(input.equals("1")) {
+					rentalBook();
+				} else if(input.equals("2")) {
+					returnBook();
+				} else {
+					System.out.println("1이나 2중에 선택하여 입력해주세요");
+					showBook();
+				}
+				break;
+			}
+			
+			case ("6"): {
 				System.out.println("///////------------종료-------------/////");
 				break;
 			}
@@ -111,39 +125,66 @@ public class Book {
 	}
 
 
+	private void returnBook() {
+		System.out.println("-----반납-------");
+	}
+
+	private void rentalBook() throws Exception {
+
+		System.out.print("대출할 도서 번호 입력 >");
+		String bookNo = sc.next();
+		int cnt = 0;
+		for(Book book:bookList) {
+			boolean chk = book.isAvailable();
+			String YN = "대출중-대출불가";
+			if(chk) {
+				YN = "대출 가능";
+			}
+			if(bookNo.equals(book.no) && chk) {
+				System.out.print("고유번호: " + book.getNo() + "\t" + "책이름: " + book.getTitle() + "\t" + "지은이: "+ book.getAuthor() + "\t" + 
+						"장르: " + book.getGanre() + "\t" + "대출가능여부: " + YN );
+				System.out.print("위 도서를 대출하시겠습니까?(Y/N)");
+				String yn = sc.next();
+				if(yn.toUpperCase().equals("Y")) {
+					book.available = false;
+					System.out.println(" ★★★★★ 대출이 정상적으로 완료되었습니다. ★★★★★");
+					showBook();
+				} else {
+					showBook();
+				}
+			} else {
+				cnt ++;
+			}
+		}
+		if(0 != cnt) {
+			System.out.println("일치하는 도서정보가 없습니다.");
+			rentalBook();
+		}
+	}
+
 	private void searchBook(String keyword) throws Exception {
-		boolean TF = false;
+		int cnt = 0;
 		for(Book book:bookList) {
 			String CHK;
 			if(book.available) {
 				CHK = "대출가능";
 			} else {
-				CHK = "대출 불가능";
+				CHK = "대출중";
 			}
 			if(keyword.equals(book.title)) {
 				System.out.println(book.no + "\t" + book.title + "\t" + book.author + "\t" + book.ganre + "\t" + CHK);
 				System.out.println("");
-				showBook();
-			} else {
-				TF = true;
+				cnt ++;
 			}
-			
 		}
-		if(TF) {
+		if(cnt == 0) {
 			System.out.println("일치하는 도서명이 없습니다.");
 			searchAgain("search");
+		} else {
+			showBook();
 		}
 	}
 	
-	private void searchAgain(String type) throws Exception {
-		if(type.equals("search")) {
-			System.out.print("도서명을 입력하세요 >");
-			String keyword = sc.next();
-			searchBook(keyword);
-		} else {
-			deleteBook();
-		}
-	}
 
 	private void insertBook() {
 		System.out.println("insertBook method in..");
@@ -155,21 +196,50 @@ public class Book {
 	}
 	
 	private void deleteBook() throws Exception {
-		System.out.print("삭제할 도서명 >");
+		System.out.print("삭제할 도서번호 >");
 		String dTitle = sc.next();
-		boolean CHK = false;
-		for(Book book:bookList) {
-			if(dTitle.equals(book.title)) {
-				
+		String CHK;
+		int cnt = 0;
+		for(int i = 0; i < bookList.size(); i++) {
+			if(bookList.get(i).available) {
+				CHK = "가능";
 			} else {
-				CHK = true;
+				CHK = "대출중-삭제불가";
+			}
+
+			while(dTitle.equals(bookList.get(i).no)) {
+				cnt++;
+				System.out.println(bookList.get(i).no + "\t" + bookList.get(i).title + "\t" + bookList.get(i).author + "\t" + bookList.get(i).ganre + "\t" + CHK);
+				System.out.print("위 책을 삭제 하시겠습니까?(Y/N) >");
+				String yn = sc.next();
+				if(yn.toUpperCase().equals("Y")) {
+					bookList.remove(i);
+					System.out.println("◆◆◆◆◆ 삭제되었습니다. ◆◆◆◆◆ ");
+					showBook();
+				} else if(yn.toUpperCase().equals("N")) {
+					showBook();
+				} else {
+					System.out.println("Y or N 입력해 주십시요");
+					deleteBook();
+				}
 			}
 		}
-		if(CHK) {
-			System.out.println("일치하는 도서명이 없습니다.");
+		if(cnt == 0) {
+			System.out.println("일치하는 도서가 없습니다.");
 			searchAgain("delete");
 			
 		}
 		
 	}
+	
+	private void searchAgain(String type) throws Exception {
+		if(type.equals("search")) {
+			System.out.print("도서명을 입력하세요 >");
+			String keyword = sc.next();
+			searchBook(keyword);
+		} else {
+			deleteBook();
+		}
+	}
+	
 }
