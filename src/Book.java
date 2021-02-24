@@ -47,15 +47,15 @@ public class Book {
 	}
 	
 	public void showBook() throws Exception {
-		for(int i =0; i<10; i++) {
-			Book book = new Book();
-			book.setNo(""+i);
-			book.setAuthor("작가");
-			book.setGanre("장르");
-			book.setTitle("제목" +i);
-			book.setAvailable(true);
-			bookList.add(book);
-		}
+//		for(int i =0; i<10; i++) {
+//			Book book = new Book();
+//			book.setNo(""+i);
+//			book.setAuthor("작가");
+//			book.setGanre("장르");
+//			book.setTitle("제목" +i);
+//			book.setAvailable(true);
+//			bookList.add(book);
+//		}
 		
 		System.out.println("===============================================================================");
 		System.out.println("     1.도서검색 || 2.도서등록 || 3.도서정보수정 || 4.도서삭제 || 5.대출/반납하기 || 6.종료");	
@@ -116,6 +116,7 @@ public class Book {
 			
 			case ("6"): {
 				System.out.println("///////------------종료-------------/////");
+				sc.close();
 				break;
 			}
 
@@ -186,8 +187,35 @@ public class Book {
 	}
 	
 
-	private void insertBook() {
-		System.out.println("insertBook method in..");
+	private void insertBook() throws Exception {
+		Book book = new Book();
+		int cnt = 0;
+		System.out.print("도서 고유번호 > ");
+		String bNo = sc.next();
+		for(int i =0; i<bookList.size(); i++) {
+			if(bNo.equals(bookList.get(i).no)) {
+				System.out.println("중복되는 번호 입니다. 다시 입력해주세요");
+				insertBook();
+			}
+		}
+		
+		book.setNo(bNo);
+		System.out.print("도서명 > ");
+		book.setTitle(sc.next());
+		System.out.print("저자명 > ");
+		book.setAuthor(sc.next());
+		System.out.print("장르 > ");
+		book.setGanre(sc.next());
+		book.setAvailable(true);
+		System.out.println("고유번호: " + book.getNo() + "\t 도서명: " + book.getTitle() + "\t 저자명: " + book.getAuthor() + "\t 장르: " + book.getGanre());
+		System.out.println("입력하신 도서 정보가 맞습니까?(Y/N)");
+		if(sc.next().toUpperCase().equals("Y")) {
+			bookList.add(book);
+			System.out.println("♥♥♥ 정상적으로 등록 완료 되었습니다. ♥♥♥");
+			showBook();
+		} else {
+			insertBook();
+		}
 	}
 	
 	private void updateBook() {
