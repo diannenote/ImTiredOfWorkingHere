@@ -126,8 +126,35 @@ public class Book {
 	}
 
 
-	private void returnBook() {
+	private void returnBook() throws Exception {
 		System.out.println("-----반납-------");
+		System.out.println("반납할 도서 고유번호> ");
+		String bNo = sc.next();
+		for(Book book:bookList) {
+			
+			if(bNo.equals(book.no) && book.available == false) {
+				System.out.println("고유번호 > " + book.no);
+				System.out.println("isAvailable> " + book.available);
+				
+			} else if (bNo.equals(book.no) && book.available) {
+				System.out.println("고유번호 > " + book.no + "  도서명>" + book.title + "  는(은) 반납할수 있는 도서가 아닙니다." );
+				System.out.println("!!반납할 도서 고유번호를 다시 입력해 주세요!!");
+				returnBook();
+			} else {
+				System.out.println("일치하는 도서가 없습니다.");
+				System.out.println("1. 메인으로 2. 반납할 도서 다시 등록 > ");
+				String input =  sc.next();
+				if(input.equals("1")) {
+					showBook();
+				} else if(input.equals("2")) {
+					returnBook();
+				} else {
+					System.out.println("입력이 잘못되었습니다. 메인으로 이동합니다.");
+					showBook();
+				}
+			}
+			
+		}
 	}
 
 	private void rentalBook() throws Exception {
@@ -142,7 +169,7 @@ public class Book {
 				YN = "대출 가능";
 			}
 			if(bookNo.equals(book.no) && chk) {
-				System.out.print("고유번호: " + book.getNo() + "\t" + "책이름: " + book.getTitle() + "\t" + "지은이: "+ book.getAuthor() + "\t" + 
+				System.out.println("고유번호: " + book.getNo() + "\t" + "책이름: " + book.getTitle() + "\t" + "지은이: "+ book.getAuthor() + "\t" + 
 						"장르: " + book.getGanre() + "\t" + "대출가능여부: " + YN );
 				System.out.print("위 도서를 대출하시겠습니까?(Y/N)");
 				String yn = sc.next();
@@ -180,7 +207,16 @@ public class Book {
 		}
 		if(cnt == 0) {
 			System.out.println("일치하는 도서명이 없습니다.");
-			searchAgain("search");
+			System.out.print("1.메인화면  2.다시검색 > ");
+			String  input = sc.next();
+			if(input.equals("1")) {
+				showBook();
+			} else if(input.equals("2")) {
+				searchAgain("search");
+			} else {
+				System.out.println("입력이 잘못 되었습니다. 메인으로 돌아갑니다");
+				showBook();
+			}
 		} else {
 			showBook();
 		}
@@ -214,12 +250,90 @@ public class Book {
 			System.out.println("♥♥♥ 정상적으로 등록 완료 되었습니다. ♥♥♥");
 			showBook();
 		} else {
+			System.out.println("등록에 실패 했습니다. 다시 등록 해주세요");
 			insertBook();
 		}
 	}
 	
-	private void updateBook() {
-		System.out.println("updateBook method in..");
+	private void updateBook() throws Exception {
+		System.out.println("수정할 도서 고유번호> ");
+		String input = sc.next();
+		int cnt = 0;
+		for(Book book:bookList) {
+			if(input.equals(book.no)) {
+				cnt ++;
+				System.out.println("===== 수정할 정보 선택 =====");
+				System.out.println("1. 도서명  2. 저자명  3. 장르 > ");
+				String num = sc.next();
+				switch (num) {
+				case "1": {
+					System.out.println("변경할 도서명 > ");
+					String cTitle = sc.next();
+					System.out.println("도서명을 『" + book.title + "』 에서 『" + cTitle + "』로 변경 하시겠습니까?(Y/N) > ");
+					String YN = sc.next();
+					if(YN.toUpperCase().equals("Y")) {
+						book.setTitle(cTitle);
+						System.out.println("◆◆ 도서명이 변경 되었습니다. ◆◆");
+						showBook();
+					} else {
+						System.out.println("//정보가 변경되지 않았습니다.//");
+						showBook();
+					}
+					
+				}
+				case "2": {
+					System.out.println("변경할 저자명 > ");
+					String cAuthor = sc.next();
+					System.out.println("저자명을 『" + book.author + "』 에서 『" + cAuthor + "』로 변경 하시겠습니까?(Y/N) > ");
+					String YN = sc.next();
+					if(YN.toUpperCase().equals("Y")) {
+						book.setAuthor(cAuthor);
+						System.out.println("◆◆ 저자명이 변경 되었습니다. ◆◆");
+						showBook();
+					} else {
+						System.out.println("//정보가 변경되지 않았습니다.//");
+						showBook();
+					}
+
+				}
+				case "3": {
+					System.out.println("변경할 장르 > ");
+					String cGanre = sc.next();
+					System.out.println("장르를 『" + book.ganre + "』 에서 『" + cGanre + "』로 변경 하시겠습니까?(Y/N) > ");
+					String YN = sc.next();
+					if(YN.toUpperCase().equals("Y")) {
+						book.setGanre(cGanre);
+						System.out.println("◆◆ 장르가 변경 되었습니다. ◆◆");
+						showBook();
+					} else {
+						System.out.println("//정보가 변경되지 않았습니다.//");
+						showBook();
+					}
+
+				}
+
+				default:
+					System.out.println("입력값이 잘못되었습니다. 다시 처음부터 입력해주세요");
+					showBook();
+				}
+			} else {
+				System.out.println("일치하는 정보가 없습니다.");
+				System.out.println("1.메인으로 2.도서정보수정 >");
+				String num2 = sc.next();
+				if(num2.equals("1")) {
+					showBook();
+				} else if(num2.equals("2")) {
+					updateBook();
+				} else {
+					System.out.println("잘못 입력 되었습니다. 메인으로 이동합니다.");
+					showBook();
+				}
+			}
+		}
+		if(cnt == 0) {
+			System.out.println("일치하는 정보가 없습니다.");
+			showBook();
+		}
 		
 	}
 	
