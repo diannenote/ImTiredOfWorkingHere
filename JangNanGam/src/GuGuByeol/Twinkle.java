@@ -16,6 +16,7 @@ public class Twinkle {
 		char val;
 		boolean num = true;
 		System.out.println(input + " DanByeol");
+		sc.close();
 		for(int i = 0; i < input.length(); i++) {
 			val = input.charAt(i);
 			num = Character.isDigit(val);
@@ -41,5 +42,6 @@ public class Twinkle {
 			}
 			num = false;
 		}
+		
 	}
 }

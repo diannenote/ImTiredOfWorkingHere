@@ -225,7 +225,6 @@ public class Book {
 
 	private void insertBook() throws Exception {
 		Book book = new Book();
-		int cnt = 0;
 		System.out.print("도서 고유번호 > ");
 		String bNo = sc.next();
 		for(int i =0; i<bookList.size(); i++) {

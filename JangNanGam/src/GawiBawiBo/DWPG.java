@@ -11,6 +11,7 @@ public class DWPG {
 		int com = (int)(Math.random()*3)+1;
 				
 		game(user, com);
+		sc.close();
 	}
 
 	private static void game(int user, int com) {
