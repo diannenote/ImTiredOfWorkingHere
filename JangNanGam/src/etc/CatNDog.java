@@ -5,7 +5,7 @@ package etc;
  )  ( ')	|q p|   /}
 (  /  )		( 0 )"""\
  \(__)|		|"^"`   |
-			||_/=\__|
+		||_/=\__|
 */ 
 public class CatNDog {
 	public static void main(String[] args) {
