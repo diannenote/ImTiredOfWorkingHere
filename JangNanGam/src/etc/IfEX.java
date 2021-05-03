@@ -46,21 +46,20 @@ public class IfEX {
 		 * 시간 계산하기 
 		 * 입력값(시(HH),분(mm) 에서 45분전
 		 */
-	/*	int h = sc.nextInt(), m = sc.nextInt();
+		int h = sc.nextInt(), m = sc.nextInt();
 		if(h == 0) h = 24;
 		int s = (h*3600) +  (m*60) - 2700;
 		m = s%3600/60;
 		h = s/3600;
-		System.out.println();
-		System.out.println(h+"\n"+m);
-	*/
-		int h = sc.nextInt(), m = sc.nextInt();
+		System.out.println(h+" "+m);
+	
+	/*	int h = sc.nextInt(), m = sc.nextInt();
 		if(m < 45) {
 			h--;
 			m = 60-(45-m);
 			if(h<0) h = 23;
 			System.out.println(h+" "+m);
 		} else System.out.println(h+" "+(m-45));  
-		
+	*/	
 	}
 }
