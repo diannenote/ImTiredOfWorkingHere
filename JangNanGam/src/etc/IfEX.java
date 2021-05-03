@@ -45,12 +45,14 @@ public class IfEX {
 		/*
 		 * 시간 계산하기 
 		 * 입력값(시(HH),분(mm) 에서 45분전
+		 * 하루시작은 0:0 끝은 23:59
 		 */
 		int h = sc.nextInt(), m = sc.nextInt();
 		if(h == 0) h = 24;
 		int s = (h*3600) +  (m*60) - 2700;
 		m = s%3600/60;
 		h = s/3600;
+		if(h==24) h =0;
 		System.out.println(h+" "+m);
 	
 	/*	int h = sc.nextInt(), m = sc.nextInt();
