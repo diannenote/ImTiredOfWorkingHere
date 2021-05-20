@@ -50,6 +50,7 @@ public class Buffer_For {
 		bw.close();
 */
 //		"Case #x: A + B = C" 형식으로 출력
+/*
 		int T = Integer.parseInt(br.readLine());
 		StringTokenizer sk;
         for(int i=0;i<T;i++){
@@ -60,5 +61,19 @@ public class Buffer_For {
             bw.write(String.format("Case #%d: %d + %d = %d\n",i+1,a,b,a+b));
         }
         bw.close();
+*/
+//		첫째 줄에는 별 1개, 둘째 줄에는 별 2개, N번째 줄에는 별 N개를 찍는 문제
+		
+		int N = Integer.parseInt(br.readLine());
+		for(int i = 0; i<N; i++) {
+			for (int j=0; j<=i; j++) {
+				bw.write("*");
+			}
+			bw.write("\n");
+		}
+		br.close();
+		
+		bw.flush();
+		bw.close();
 	}
 }
